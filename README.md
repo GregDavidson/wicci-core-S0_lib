@@ -1,11 +1,16 @@
 # Wicci Project Core
-# Web Interface to Collaborative Community Intelligence
+
+## Web Interface to Collaborative Community Intelligence
+
+A pun on Wiki, pronounced like Witchy
 
 ## Directory: ~/.Wicci/Core
 Contains: Source files for Wicci Core within PostgreSQL
 
 ### Core Directory Files:
 
+|FILE			| DESCRIPTION
+|-----------------------|----------
 |README			| this file
 |Makefile		| coordinates lower-level makefiles
 |Makefile.wicci		| included by all wicci makefiles
@@ -20,6 +25,8 @@ Contains: Source files for Wicci Core within PostgreSQL
 
 ### Source subdirectories:
 
+|DIRECTORY	| DESCRIPTION
+|---------------|----------
 |C_lib/		| C language support library
 |S0_lib/	| SQL language support library
 |S1_spx/	| Server Programming eXtensions including
@@ -34,6 +41,8 @@ Contains: Source files for Wicci Core within PostgreSQL
 
 ### Important Sibling Directories and Files:
 
+|FILE or DIRECTORY		| DESCRIPTION
+|-------------------------------|----------
 |..				| Wicci Project Directory
 |../Tools/bin			| Wicci utility programs (mostly scripts)
 |../Tools/lib/wicci.sh		| source to create Wicci environment
@@ -45,11 +54,15 @@ The S?_* directory names are also the names of SQL Schemas.
 
 ### More Source subdirectories:
 
+|Directory		| DESCRIPTION
+|-----------------------|----------
 |Test/	| Miscellanea for Testing
 |Shim/	| a thin httpd reverse proxy, front-end for the Wicci
 
 ### External references:
 
+|FILE or DIRECTORY			| DESCRIPTION
+|-----------------------|----------
 | /Shared/Lib/SQL/Util/SQL	| Some utilities shared with other projects
 | ~/.Wicci			| A symlink to the Wicci Project Directory
 | /usr/local/pgsql		| A symlink to the local PostgreSQL
