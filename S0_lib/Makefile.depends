@@ -1,0 +1,40 @@
+#_int.sql
+#pgxml.sql
+#citext.sql
+brama.sql-out: brama.sql
+xtest.sql-out: xtest.sql brama.sql-out
+misc.sql-out: misc.sql xtest.sql-out
+array.sql-out: array.sql misc.sql-out
+triggers.sql-out: triggers.sql array.sql-out
+schemas-schema.sql-out: schemas-schema.sql triggers.sql-out
+schemas-code.sql-out: schemas-code.sql schemas-schema.sql-out
+modules-schema.sql-out: modules-schema.sql schemas-code.sql-out
+modules-code.sql-out: modules-code.sql modules-schema.sql-out
+module-deps-schema.sql-out: module-deps-schema.sql modules-code.sql-out
+module-deps-code.sql-out: module-deps-code.sql module-deps-schema.sql-out
+#name-id-pairs.sql
+#name-oid-pairs.sql
+bool.sql-out: bool.sql module-deps-code.sql-out
+debug-schema.sql-out: debug-schema.sql bool.sql-out
+debug-code.sql-out: debug-code.sql debug-schema.sql-out
+str.sql-out: str.sql debug-code.sql-out
+pg-meta.sql-out: pg-meta.sql str.sql-out
+meta-schema.sql-out: meta-schema.sql pg-meta.sql-out
+meta-code.sql-out: meta-code.sql meta-schema.sql-out
+meta-tst.sql-out: meta-tst.sql meta-code.sql-out
+meta-more-schema.sql-out: meta-more-schema.sql meta-tst.sql-out
+meta-more-code.sql-out: meta-more-code.sql meta-more-schema.sql-out
+handles.sql-out: handles.sql meta-more-code.sql-out
+handles-tst-data.sql-out: handles-tst-data.sql handles.sql-out
+handles-tst.sql-out: handles-tst.sql handles-tst-data.sql-out
+bitset-schema.sql-out: bitset-schema.sql handles-tst.sql-out
+bitset-code.sql-out: bitset-code.sql bitset-schema.sql-out
+bitset-tst.sql-out: bitset-tst.sql bitset-code.sql-out
+time.sql-out: time.sql bitset-tst.sql-out
+notes-schema.sql-out: notes-schema.sql time.sql-out
+notes-code.sql-out: notes-code.sql notes-schema.sql-out
+# notes-tst.sql
+pg-xml.sql-out: pg-xml.sql notes-code.sql-out
+xml-code.sql-out: xml-code.sql pg-xml.sql-out
+html.sql-out: html.sql xml-code.sql-out
+s0-lib.sql-out: s0-lib.sql html.sql-out

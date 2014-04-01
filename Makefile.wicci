@@ -1,0 +1,116 @@
+#  -*-Mode: makefile;-*-	Requires GNU Make.
+# Copyright (c) 2005-2010, J. Greg Davidson, all rights reserved.
+# Not to be copied nor shown to anyone without my permission in writing.
+
+# This Makefile is included by all other Wicci Makefiles.
+export SHELL=/bin/bash
+DB ?= wicci1
+WicciHome ?= $(HOME)/.Wicci
+Make := $(WicciHome)/Make
+M=$(Make)/$(DB)
+Core := $(WicciHome)/Core
+This :=$(Core)/Makefile.wicci
+CoreDirs :=$(Core)/WICCI-CORE-DIRS
+SqlDirs :=$(Core)/WICCI-SQL-DIRS
+SomeDirs :=$(Core)/WICCI-SOME-DIRS
+CLib=$(Core)/C_lib
+INC_C = -I$(CLib)
+XFiles=$(WicciHome)/XFiles
+RefsDir=$(Core)/S1_spx
+SpxDir=$(Core)/S1_spx
+DepMakes:=Makefile.depends
+Schema:=$(shell pwd | sed 's+.*/++' | tr A-Z a-z)
+SchemaOut:=$(shell echo $(Schema) | tr _ -).sql-out
+# vpath % $M # can we just do this???
+vpath %.o $M
+vpath %.so $M
+vpath %.css-out $M
+vpath %.html-out $M
+vpath %.js-out $M
+vpath %.sql-out $M
+vpath %.svg-out $M
+vpath xfiles $M
+# CHANGE: added -std=gnu99 on Sunday 20 December 2009 by jgd !!!
+#CFLAGS = -fpic -g -I$(PG_INCLUDE) $(INC_C) -Wall -fPIC -std=gnu99
+CFLAGS = -fpic -g -I$(PG_INCLUDE) $(INC_C) -Wall -std=gnu99
+PGSQL := /usr/local/pgsql
+PGBIN := $(PGSQL)/bin
+PIPEFAIL=set -o pipefail
+DOC_TO_SQL := doc-to-sql
+FDOC := $(DOC_TO_SQL) -f
+PDOC := $(PIPEFAIL) ; $(DOC_TO_SQL) -d $(DB)
+PSQL := $(PIPEFAIL) ; $(PGBIN)/psql -v psql=../Sql/psql.sql $(DB) -f
+PG_INCLUDE := $(shell $(PGBIN)/pg_config --includedir-server)
+.PHONY: all default clean clean-out clean-o clean-db clean-all clean-all-outs cc cflags TAGS-all depends-all
+%.html-sql :: %.html
+	$(FDOC)  $<
+%.css-sql :: %.css
+	$(FDOC)  $<
+%.svg-sql :: %.svg
+	$(FDOC)  $<
+%.html-out :: %.html
+	$(PDOC)  $< 2>&1 | tee $M/$@-err && mv $M/$@-err $M/$@
+%.css-out :: %.css
+	$(PDOC)  $< 2>&1 | tee $M/$@-err && mv $M/$@-err $M/$@
+%.svg-out :: %.svg
+	$(PDOC)  $< 2>&1 | tee $M/$@-err && mv $M/$@-err $M/$@
+%.sql-out :: %.sql
+	$(PSQL) $< 2>&1 | tee $M/$@-err && mv $M/$@-err $M/$@
+default: all
+# For make-depends-fancy use this line
+# $(DepMakes): $(Core)/WICCI-SQL-DEPENDS WICCI-SQL-FILES
+# Otherwise use this line:
+$(DepMakes): WICCI-SQL-FILES
+	PATH=".:$$PATH" make-depends $^ | grep -v '^	$$(PSQL)'> $@
+clean: clean-out clean-o
+clean-out:
+	for f in *.sql; do rm -f $M/$$f-out $M/$$f-out-err; done
+clean-o:
+	for f in *.c; do rm -f $M/$${f%.c}.o $M/$${f%.c}.so; done
+clean-out-all:
+	rm -f $M/*
+clean-db: clean-out-all
+	dropdb $(DB) && createdb $(DB)
+clean-all: clean-db
+	rm -f $(Core)/*/$(DepMakes)
+depends-all:
+	for f in $$(< $(SqlDirs)); do (cd $(Core)/"$$f" ; make -f $(This)  $(DepMakes)); done
+rebuild-all: TAGS-all depends-all
+	for f in $$(< $(CoreDirs)); do (cd $(Core)/"$$f" ; make all || exit 2) || exit 1; done
+	(cd $(Core); make TAGS TAGS-sql TAGS-c)
+rebuild-some:
+	for f in $$(< $(SomeDirs)); do (cd $(Core)/"$$f" ; make all || exit 2) || exit 1; done
+xfiles:
+	cd $(XFiles); make all && touch $M/xfiles
+TAGS:
+	etags $$(wicci-files all)
+TAGS-sql:
+	etags -o $@ $$(wicci-files sql)
+TAGS-c:
+	etags -o $@ $$(wicci-files c)
+TAGS-all:
+	(cd $(Core); make TAGS TAGS-sql TAGS-c)
+showvars:
+	@ echo SHELL = "$(SHELL)"
+	@ echo DB  = "$(DB)"
+	@ echo WicciHome  = "$(WicciHome)"
+	@ echo Make  = "$(Make)"
+	@ echo M = "$(M)"
+	@ echo Core  = "$(Core)"
+	@ echo This  = "$(This)"
+	@ echo CoreDirs  = "$(CoreDirs)"
+	@ echo SqlDirs  = "$(SqlDirs)"
+	@ echo SomeDirs  = "$(SomeDirs)"
+	@ echo XFilesHTML = "$(XFilesHTML)"
+	@ echo XFilesSVG = "$(XFilesSVG)"
+	@ echo INC_C = "$(INC_C)"
+	@ echo RefsDir = "$(RefsDir)"
+	@ echo SpxDir = "$(SpxDir)"
+	@ echo DepMakes = "$(DepMakes)"
+	@ echo Schema = "$(Schema)"
+	@ echo SchemaOut = "$(SchemaOut)"
+	@ echo CFLAGS  = "$(CFLAGS)"
+	@ echo PGSQL  = "$(PGSQL)"
+	@ echo PGBIN  = "$(PGBIN)"
+	@ echo PSQL  = "$(PSQL)"
+	@ echo PG_INCLUDE  = "$(PG_INCLUDE)"

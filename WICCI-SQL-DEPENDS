@@ -1,0 +1,12 @@
+# #set show-input
+# #set debug
+# make-depends -this-file- -some-wicci-sql-depends-file-
+# #set no-comment-lines
+#set no-empty-lines
+# don't use test file as dependency for the next file
+# #set no-depend [-_]tst$
+# feed variables into psql
+# #rule sql-out sql $(PSQL) 'file_name= top_schema= 'top_schema= schema_path= 'first_so= $(DB) -f $< 2>&1 | tee $@-err && mv $@-err $@
+# no variables for psql
+#rule sql-out sql $(PSQL) -f $< 2>&1 | tee $@-err && mv $@-err $@
+#schema public	# initial schema
