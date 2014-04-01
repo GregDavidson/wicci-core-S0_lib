@@ -6,11 +6,11 @@ SELECT set_file('xtest.sql', '$Id');
 
 -- ** Copyright
 
--- Copyright (c) 2008 - 2012, J. Greg Davidson, all rights reserved.
--- Although it is my intention to make this code available
--- under a Free Software license when it is ready, this code
--- is currently not to be copied nor shown to anyone without
--- my permission in writing.
+-- Copyright (c) 2008 - 2012, J. Greg Davidson.
+-- You may use this file under the terms of the
+-- GNU AFFERO GENERAL PUBLIC LICENSE 3.0
+-- as specified in the file LICENSE.md included with this distribution.
+-- All other use requires my permission in writing.
 
 CREATE OR REPLACE
 FUNCTION test_if(bool, text = 'test') RETURNS bool AS $$
