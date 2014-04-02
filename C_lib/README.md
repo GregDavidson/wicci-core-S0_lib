@@ -18,15 +18,5 @@
 | dwim.h	| some techniques to consider using, not currently in use
 | maybe-inline.h	| make datatypes fast AND private, alpha status
 
-
-debug.h: debugging support with some PostgreSQL features
-debug-log.h: logging support with some PostgreSQL features
-debug-log.c : owns FILE *debug_log_
-debug-test: tests debug, debug-log w/o PostgreSQL
-debug-test.log: output of debug-test
-debug-test.log.good: expected output of debug-test
-
-Note that there is a level-loop between the debugging code
-here and supposedly later levels:
-	debug.h uses FUNCTION_DEFINE from Spx/spx.h
-	debug-log.h uses JoinCalls from TRef/tref.h
+Some files providing debugging support have been moved to
+S1_refs so that they can be controlled from PostgreSQL.
