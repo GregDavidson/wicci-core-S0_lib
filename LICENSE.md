@@ -1,4 +1,4 @@
-The Wicci Core files and S0_lib subdirectory are covered by the
+The files of Wicci Core subdirectories C_lib and S0_lib are covered by the
 
 GNU AFFERO GENERAL PUBLIC LICENSE
                        Version 3, 19 November 2007
