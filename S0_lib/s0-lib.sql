@@ -6,7 +6,7 @@ CREATE OR REPLACE
 FUNCTION sql_wicci_ready() RETURNS void AS $$
 DECLARE
 	schema_name TEXT[] :=
-		string_to_array('S7_wicci,S6_http,S5_xml,S4_doc,S3_more,S2_core,S1_spx,S0_lib,public,pg_catalog', ',');
+		string_to_array('S7_wicci,S6_http,S5_xml,S4_doc,S3_more,S2_core,S1_refs,S0_lib,public,pg_catalog', ',');
 		i integer;
 BEGIN
 -- Check sufficient elements of the Sql

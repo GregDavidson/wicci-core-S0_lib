@@ -29,7 +29,7 @@ Contains: Source files for Wicci Core within PostgreSQL
 |---------------|----------
 |C_lib/		| C language support library
 |S0_lib/	| SQL language support library
-|S1_spx/	| Server Programming eXtensions including
+|S1_refs/	| Server Programming eXtensions including
 |               | Refs = Tagged/Typed Object References
 |S2_core/	| Ref Types for Unique Names and Environment Contexts
 |S3_more/	| Ref Types for Arrays, Texts & Scalars

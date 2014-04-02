@@ -7,9 +7,8 @@ TAGS
 TAGS-*
 Limbo
 Makefile.depends
-C_lib
 Doc
-S1_spx
+S1_refs
 S2_core
 S3_more
 S4_doc
