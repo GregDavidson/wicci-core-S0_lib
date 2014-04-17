@@ -1,8 +1,10 @@
 # Wicci Project Core
 
-## Web Interface to Collaborative Community Intelligence
+## A pun on Wiki, pronounced like Witchy
 
-A pun on Wiki, pronounced like Witchy
+Possible Acronyms:
+
+Web Interface to Collaborative Community Intelligence
 
 ## Directory: ~/.Wicci/Core
 Contains: Source files for Wicci Core within PostgreSQL
