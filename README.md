@@ -6,6 +6,18 @@ Possible Acronyms:
 
 Web Interface to Collaborative Community Intelligence
 
+This is one piece of the Wicci System.
+The complete Wicci system has PostgreSQL extensions providing:
+
+* Metaprogramming for Generics and Boilerplate elimination
+* Strongly Typed References with Generalization
+* Dispatching of Operator Functions to Method Functions
+* Monotonic Classes and NULL-mitigation
+* Immutable Documents supporting Multiple, Collaborative Views
+* An extensible Web-Server implemented *in the database*
+* Support for Business Logic *in the database*
+* And more!
+
 ## Directory: ~/.Wicci/Core
 Contains: Source files for Wicci Core within PostgreSQL
 
