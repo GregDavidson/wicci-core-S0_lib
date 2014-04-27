@@ -1,13 +1,8 @@
 # Wicci Project Core
 
-## A pun on Wiki, pronounced like Witchy
+## Part 0 of the Wicci System
 
-Possible Acronyms:
-
-Web Interface to Collaborative Community Intelligence
-
-This is one piece of the Wicci System.
-The complete Wicci system has PostgreSQL extensions providing:
+The Wicci System consists of PostgreSQL extensions providing:
 
 * Metaprogramming for Generics and Boilerplate elimination
 * Strongly Typed References with Generalization
@@ -17,6 +12,27 @@ The complete Wicci system has PostgreSQL extensions providing:
 * An extensible Web-Server implemented *in the database*
 * Support for Business Logic *in the database*
 * And more!
+
+## What's a Wicci System again and what's with the name?
+
+The Wicci System is an Extended Relational Database System with Web interface which
+supports putting more or even all of a project's business logic *in the database*.
+
+The Wicci System is currently implemented as PostgreSQL extensions although it could be ported to work with other RDBMSs.
+
+The original Wicci System was designed as a platform to allow building much better community Wiki systems.
+The Wicci system is an excellent platform for Wikis and an unlimited range of other database-oriented applications and services which need to support
+
+* documents with multiple views
+* forks and joins
+* community collaboration
+* etc.
+
+The word *Wicci* is a pun on *Wiki*, pronounced like *witchy*.
+
+Possible Acronyms:
+
+* Web Interface to Collaborative Community Intelligence
 
 ## Directory: ~/.Wicci/Core
 Contains: Source files for Wicci Core within PostgreSQL
