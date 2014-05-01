@@ -1,6 +1,6 @@
 # Wicci Project Core
 
-## Part 0 of the Wicci System
+## Core and Schema 0 of the Wicci System
 
 The Wicci System consists of PostgreSQL extensions providing:
 
@@ -33,6 +33,10 @@ The word *Wicci* is a pun on *Wiki*, pronounced like *witchy*.
 Possible Acronyms:
 
 * Web Interface to Collaborative Community Intelligence
+
+These diagrams may help clarify these descriptions:
+
+* [Wicci Diagrams](http://ngender.net/wicci/diagram)
 
 ## Directory: ~/.Wicci/Core
 Contains: Source files for Wicci Core within PostgreSQL
@@ -97,3 +101,10 @@ The S?_* directory names are also the names of SQL Schemas.
 | ~/.Wicci			| A symlink to the Wicci Project Directory
 | /usr/local/pgsql		| A symlink to the local PostgreSQL
 | tomboy notes			| Older notes to mine for gold
+
+This Git repository contains two of the required 11 parts required
+to build and install the Wicci System.  All but two of the parts are
+now on GitHub.  Still missing are
+
+* TOols - he Wicci support scripts, including scripts for correctly building and installing PostgreSQL
+* The Shim - the key Reverse Proxy Server which relays HTTP requests to the database
