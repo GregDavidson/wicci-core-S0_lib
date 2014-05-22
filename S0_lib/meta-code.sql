@@ -1399,7 +1399,7 @@ DECLARE
 BEGIN
 	SELECT INTO ret debug_fail($2, $1, CASE
 		WHEN ($1).name_ IS NULL THEN 'function name is NULL'
-		WHEN ($1).lang_ IS NULL THEN 'function language is NULL'
+		WHEN ($1).lang IS NULL THEN 'function language is NULL'
 		WHEN ($1).body IS NULL AND ($1).obj_file IS NULL THEN
 			'either a body or link file required'
 		WHEN ($1).body IS NOT NULL AND ($1).obj_file IS NOT NULL THEN
