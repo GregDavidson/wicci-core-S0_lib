@@ -8,4 +8,4 @@
 include ../Makefile.wicci
 vpath %.sql /usr/local/pgsql/share/contrib
 all: $(DepMakes) $(SchemaOut)
-include $(DepMakes)
+-include $(DepMakes)

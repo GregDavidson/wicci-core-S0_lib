@@ -19,7 +19,7 @@ Shim
 Test
 XFiles
 .emacs.desktop
-GREG-READ
+GREG*
 STATUS
 bar.sql
 foo.sql
@@ -30,3 +30,5 @@ sher-talk.txt
 sp2-to-tab.ed
 the-output
 wicci-today
+Clojure
+ClojureScript
