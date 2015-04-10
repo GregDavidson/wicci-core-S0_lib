@@ -1,5 +1,7 @@
 # Wicci Project Core
 
+See the [Wicci Project Page](https://gregdavidson.github.io/wicci-core-S0_lib/) for an overview and index of the whole project and its 12 constituent repositories.
+
 ## Core and Schema 0 of the Wicci System
 
 The Wicci System consists of PostgreSQL extensions providing:
@@ -102,13 +104,4 @@ The S?_* directory names are also the names of SQL Schemas.
 | /usr/local/pgsql		| A symlink to the local PostgreSQL
 | tomboy notes			| Older notes to mine for gold
 
-This Git repository contains two of the 12 parts (subsystems) required
-to build and install the Wicci System.  All but three of the parts are
-now on GitHub.  Three parts are not yet stable enough to upload to GitHub
-although they should appear shortly.  These are
-
-| SUBSYSTEM			| DESCRIPTION
-|-----------------------|----------
-| Tools         | Wicci support scripts, including scripts for correctly building and installing PostgreSQL
-| The Shim      | Reverse Proxy Server which relays HTTP requests to the database
-| XFiles        | Initial content to be managed and served by the Wicci System
+These materials need to be incorporated into the appropriate Wicci Project Repositories!!
