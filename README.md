@@ -17,4 +17,4 @@ The Wicci System is a collaborative content management system.  It consists of t
 | XFiles - coming soon | Multimedia files to load into Wicci Documents
 | [Tools](https://github.com/GregDavidson/wicci-tools)	| Wicci utility programs (mostly scripts)
 | [Docs](https://github.com/GregDavidson/wicci-doc)	| Documentation on the Wicci outside of the Wicci
-| [The Wicci Shim](https://github.com/GregDavidson/wicci-shim) | Reverse Proxy for Wicci HTTP Server
+| [The Wicci Shim](https://github.com/GregDavidson/wicci-shim-rust) | Reverse Proxy for Wicci HTTP Server
