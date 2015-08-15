@@ -100,6 +100,24 @@ COMMENT ON FUNCTION debug_assert(
 ) IS 'Returns given value when condition true otherwise
 fails.';
 
+-- Warnings
+
+CREATE OR REPLACE FUNCTION debug_warn(
+	regprocedure, ANYELEMENT, VARIADIC text[] = '{}'
+) RETURNS ANYELEMENT AS $$
+BEGIN
+	RAISE WARNING 'WARNING: %!',
+		array_to_string(
+			ARRAY[$1::text, COALESCE($2::text, 'NULL')] || $3, ' '
+		);
+	RETURN $2;
+END
+$$ LANGUAGE plpgsql;
+
+COMMENT ON
+FUNCTION debug_warn(regprocedure, ANYELEMENT, text[])
+IS 'Raise WARNING & report function, entity, messages.';
+
 -- Here's how to find out what signatures are around for
 -- a given function name, e.g. debug_on:
 --

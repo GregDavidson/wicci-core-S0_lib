@@ -51,7 +51,15 @@ report failure of given function with entity and any messages.';
 CREATE OR REPLACE FUNCTION non_null(
 	ANYELEMENT, regprocedure, VARIADIC text[] = NULL
 ) RETURNS ANYELEMENT AS $$
-	SELECT COALESCE($1, debug_fail($2, $1, VARIADIC $3))
+	SELECT COALESCE($1, debug_fail($2, $1, VARIADIC ($3 || 'IS NULL'::text)))
+$$ LANGUAGE sql;
+COMMENT ON FUNCTION non_null(ANYELEMENT, regprocedure, text[])
+IS 'Returns first argument when non-null; reports error otherwise';
+
+CREATE OR REPLACE FUNCTION non_null_warn(
+	ANYELEMENT, regprocedure, VARIADIC text[] = NULL
+) RETURNS ANYELEMENT AS $$
+	SELECT COALESCE($1, debug_warn($2, $1, VARIADIC ($3 || 'IS NULL'::text)))
 $$ LANGUAGE sql;
 COMMENT ON FUNCTION non_null(ANYELEMENT, regprocedure, text[])
 IS 'Returns first argument when non-null; reports error otherwise';

@@ -15,7 +15,7 @@ SELECT set_file('xtest.sql', '$Id');
 CREATE OR REPLACE
 FUNCTION test_if(bool, text = 'test') RETURNS bool AS $$
 BEGIN
-	IF $1 IS NULL OR NOT $1 THEN
+	IF ($1 IS NULL) OR NOT $1 THEN
 		RAISE EXCEPTION 'Failed %!', $2;
 	END IF;
 	RETURN $1;
@@ -26,7 +26,7 @@ CREATE OR REPLACE
 FUNCTION test_func(regprocedure, bool, text = 'test')
 RETURNS regprocedure AS $$
 BEGIN
-	IF $2 IS NULL OR NOT $2 THEN
+	IF ($2 IS NULL) OR NOT $2 THEN
 		RAISE EXCEPTION 'FUNCTION % failed %!', $1, $3;
 	END IF;
 	RETURN $1;
@@ -37,7 +37,7 @@ CREATE OR REPLACE
 FUNCTION test_func(regprocedure, ANYELEMENT, ANYELEMENT, text = '')
 RETURNS regprocedure AS $$
 BEGIN
-	IF $2 IS NULL != $3 IS NULL OR $2 != $3 THEN
+	IF ($2 IS NULL) != ($3 IS NULL) OR ($2 != $3) THEN
 		RAISE EXCEPTION
 		E'FUNCTION % RETURNED:\n"%" ! "%"',
 		$1::text || $4, $2, $3;
@@ -55,7 +55,7 @@ CREATE OR REPLACE
 FUNCTION test_func_tokens(regprocedure, text, text, text = '')
 RETURNS regprocedure AS $$
 BEGIN
-	IF $2 IS NULL != $3 IS NULL
+	IF ($2 IS NULL) != ($3 IS NULL)
 	OR text_tokens($2) != text_tokens($3) THEN
 		RAISE EXCEPTION
 		E'FUNCTION % RETURNED:\n~~>%<~~ ! ~~>%<~~',

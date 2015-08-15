@@ -1,6 +1,7 @@
 *~
 *.o
 *.so
+*.out
 *.sql-out
 *.sql-out-err
 TAGS

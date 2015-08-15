@@ -73,7 +73,7 @@ clean-o:
 clean-out-all:
 	rm -f $M/*
 clean-db: clean-out-all
-	dropdb $(DB) && createdb $(DB)
+	dropdb --if-exists $(DB) && createdb $(DB)
 clean-all: clean-db
 	rm -f $(Core)/*/$(DepMakes)
 depends-all:
