@@ -21,6 +21,8 @@ CREATE EXTENSION IF NOT EXISTS intarray;
 
 CREATE EXTENSION IF NOT EXISTS xml2;
 
+CREATE EXTENSION IF NOT EXISTS hstore;
+
 -- * Misc debugging-related functions needed early
 
 -- CREATE OR REPLACE FUNCTION debug_fail_(
