@@ -61,6 +61,12 @@ COMMENT ON FUNCTION debug_on(regprocedure, boolean)
 IS 'Set debugging for this procedure to indicated value.
 E.g.: select debug_on(''debug_on(regprocedure, boolean)'', true)';
 
+CREATE OR REPLACE
+FUNCTION debug_set(VARIADIC regprocedure[])
+RETURNS void AS $$
+	SELECT debug_on(proc, true) FROM unnest($1) proc
+$$ LANGUAGE SQL;
+
 /*
 CREATE OR REPLACE FUNCTION debug_assert_failed(
 	regprocedure, ANYELEMENT, text[]
