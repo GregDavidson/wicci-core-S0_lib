@@ -4,6 +4,8 @@ SELECT set_file('meta-schema.sql', '$Id');
 
 --	PostgreSQL Metaprogramming Utilities Schema
 
+--	Future Plans prefaced by "Wicci Next"
+
 -- ** Copyright
 
 --	Copyright (c) 2005, 2006, J. Greg Davidson.
@@ -58,6 +60,9 @@ COMMENT ON TYPE meta_entities IS
 -- ahead, the commentable field will allow us to know if PostgreSQL
 -- can store comments for the corresponding entity.
 
+-- Wicci Next: Accept comments on all entities.
+-- Store comments ourselves where PostgreSQL doesn't!!
+
 CREATE TABLE IF NOT EXISTS meta_entity_traits (
 	entity meta_entities PRIMARY KEY,
 	name text UNIQUE,
@@ -94,6 +99,23 @@ CREATE DOMAIN sql_exprs AS TEXT NOT NULL;
 COMMENT ON DOMAIN sql_exprs IS
 'an sql expression yielding a value';
 CREATE DOMAIN maybe_sql_exprs AS TEXT;
+
+-- Wicci Next:
+-- Add fields from meta_columns
+--   not_null boolean,
+--   comment_ text
+-- Get rid of
+--   TABLE meta_args
+--   TABLE meta_columns
+-- and just use meta_colargs.
+-- We want comments for everything
+--   We should record them when PostgreSQL doesn't
+-- We want to know if we should allow args to be null
+--   We should check them when PostgreSQL doesn't
+--   Interacts with whether function is strict!
+-- Note that default field names exist
+--   based on the ordinal position of the
+--   column starting at 1.
 
 CREATE TABLE IF NOT EXISTS meta_colargs (
 	name_ text, -- NOT NULL,
@@ -143,10 +165,12 @@ RETURNS arg_name_arrays AS $$
 	SELECT $1::arg_name_arrays
 $$ LANGUAGE sql;
 
+-- Wicci Next: replace with meta_colargs
+
 CREATE TABLE IF NOT EXISTS meta_args (
 	mode_ meta_argmodes DEFAULT 'meta__in',
 	variadic_ boolean DEFAULT false
-) INHERITS(meta_colargs);
+) INHERITS (meta_colargs);
 
 SELECT declare_abstract('meta_args');
 
@@ -365,6 +389,8 @@ SELECT declare_abstract('meta_foreign_keys');
 
 -- ** TYPE meta_columns
 
+-- Wicci Next: replace with meta_colargs
+
 CREATE TABLE IF NOT EXISTS meta_columns (
 	CHECK(name_ IS NOT NULL),
 	not_null boolean,
@@ -386,6 +412,10 @@ CREATE TYPE meta_temp_tables AS ENUM (
 
 -- ** meta_types
 
+-- Wicci Next: Why not accept all the features of tables
+-- for composite types?  In some cases we can generate
+-- code to do the right thing even though PostgreSQL doesn't!!
+
 CREATE TABLE IF NOT EXISTS meta_composite_types (
 	name_ text NOT NULL PRIMARY KEY,
 	cols meta_columns[] NOT NULL,
@@ -400,7 +430,7 @@ added in later versions of PostgreSQL, they can simply be
 moved from meta_tables to meta_composite_types.  Ironically
 this table is being created just for its type, so that we
 can use the richer featureset of tables to get the types we
-want, e.g. inheritance.  Although bettern than what is
+want, e.g. inheritance.  Although better than what is
 available for types, the constraint system for tables is
 also too limited to allow the expression of all of the
 needed constraints, e.g. requiring that the names of columns
