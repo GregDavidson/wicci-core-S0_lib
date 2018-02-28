@@ -172,14 +172,15 @@ SELECT test_func(
 
 -- **  array_steps(array, step, dimension) -> set of indices of the array
 CREATE OR REPLACE
-FUNCTION array_steps(ANYARRAY, integer, integer DEFAULT 1) RETURNS SETOF integer AS $$
-	SELECT CASE
-		WHEN lo IS NOT NULL
-		THEN CASE
-			WHEN $2 > 0 THEN generate_series(lo, hi, $2)
-			WHEN $2 < 0 THEN generate_series(hi, lo, $2)
-		END
-	END FROM array_lower($1, $3) lo, array_upper($1, $3) hi
+FUNCTION array_steps(ANYARRAY, integer, integer DEFAULT 1)
+RETURNS SETOF integer AS $$
+	SELECT generate_series(
+		CASE WHEN $2 > 0 THEN lo WHEN $2 < 0 THEN hi END,
+		CASE WHEN $2 > 0 THEN hi WHEN $2 < 0 THEN lo END,
+		$2
+	) FROM
+		array_lower($1, $3) lo,
+		array_upper($1, $3) hi
 $$ LANGUAGE SQL IMMUTABLE;
 COMMENT ON FUNCTION array_steps(ANYARRAY, integer, integer) IS
 'returns every step $2 index of the array $1';
