@@ -36,7 +36,7 @@ vpath xfiles $M
 # CHANGE: added -std=gnu99 on Sunday 20 December 2009 by jgd !!!
 #CFLAGS = -fpic -g -I$(PG_INCLUDE) $(INC_C) -Wall -fPIC -std=gnu99
 CFLAGS = -fpic -g -I$(PG_INCLUDE) $(INC_C) -Wall -std=gnu99
-PGSQL := /usr/local/pgsql
+PGSQL := /usr/local/SW/pgsql
 PGBIN := $(PGSQL)/bin
 PIPEFAIL=set -o pipefail
 DOC_TO_SQL := doc-to-sql
