@@ -105,7 +105,7 @@ The S[0-7]_* directory names are also the names of SQL Schemas.
 |-----------------------|----------
 | /Shared/Lib/SQL/Util/SQL	| Some utilities shared with other projects
 | ~/.Wicci			| A symlink to the Wicci Project Directory
-| /usr/local/pgsql		| A symlink to the local PostgreSQL
+| /usr/local/SW/pgsql		| A symlink to the local PostgreSQL
 | tomboy notes			| Older notes to mine for gold
 
 To build the full Wicci you must check out the 10 key projects and

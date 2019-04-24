@@ -6,6 +6,6 @@
 # All other use requires my permission in writing.
 
 include ../Makefile.wicci
-vpath %.sql /usr/local/pgsql/share/contrib
+vpath %.sql /usr/local/SW/pgsql/share/contrib
 all: $(DepMakes) $(SchemaOut)
 -include $(DepMakes)
