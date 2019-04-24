@@ -44,7 +44,7 @@ FDOC := $(DOC_TO_SQL) -f
 PDOC := $(PIPEFAIL) ; $(DOC_TO_SQL) -d $(DB)
 PSQL := $(PIPEFAIL) ; $(PGBIN)/psql -v psql=../Sql/psql.sql $(DB) -f
 PG_INCLUDE := $(shell $(PGBIN)/pg_config --includedir-server)
-.PHONY: all default clean clean-out clean-o clean-db clean-all clean-all-outs cc cflags TAGS-all depends-all
+.PHONY: all default clean clean-out clean-o clean-db clean-all clean-all-outs cflags TAGS-all depends-all
 %.html-sql :: %.html
 	$(FDOC)  $<
 %.css-sql :: %.css
