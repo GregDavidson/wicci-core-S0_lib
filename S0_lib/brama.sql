@@ -64,7 +64,7 @@ CREATE OR REPLACE FUNCTION non_null_warn(
 	SELECT COALESCE($1, debug_warn($2, $1, VARIADIC ($3 || 'IS NULL'::text)))
 $$ LANGUAGE sql;
 COMMENT ON FUNCTION non_null(ANYELEMENT, regprocedure, text[])
-IS 'Returns first argument when non-null; reports error otherwise';
+IS 'Returns first argument when non-null; gives warning otherwise';
 
 -- * early_modules
 
@@ -80,6 +80,7 @@ COMMENT ON TABLE early_modules IS '
 	the module registration system is in place,
 	after which these rows will be reprocessed
 	and this table will be dropped!
+	Should we keep track of order??
 ';
 
 CREATE OR REPLACE
