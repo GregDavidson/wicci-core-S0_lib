@@ -6,6 +6,9 @@
 # All other use requires my permission in writing.
 
 include ../Makefile.wicci
-vpath %.sql /usr/local/SW/pgsql/share/contrib
+# The extension system obsoletes share/contrib
+# Now there's share/extension
+# but maybe we don't need it?? Let's try and see!!
+# vpath %.sql /usr/local/SW/pgsql/share/contrib
 all: $(DepMakes) $(SchemaOut)
 -include $(DepMakes)
