@@ -7,6 +7,8 @@
 -- schema which we can fill with our fundamental utility functions,
 -- including those which manage schemas and modules nicely.
 
+\set VERBOSITY verbose
+\set ON_ERROR_STOP
 DO $$
 DECLARE
 	schema_name text;
