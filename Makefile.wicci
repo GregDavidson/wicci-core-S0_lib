@@ -35,7 +35,9 @@ vpath %.svg-out $M
 vpath xfiles $M
 # CHANGE: added -std=gnu99 on Sunday 20 December 2009 by jgd !!!
 #CFLAGS = -fpic -g -I$(PG_INCLUDE) $(INC_C) -Wall -fPIC -std=gnu99
-CFLAGS = -fpic -g -I$(PG_INCLUDE) $(INC_C) -Wall -std=gnu99
+#CFLAGS = -fpic -g -I$(PG_INCLUDE) $(INC_C) -Wall -std=gnu99
+# -g creates weird subdirectory on the Mac - figure out how to conditionally exclude it!!!
+CFLAGS = -fpic -I$(PG_INCLUDE) $(INC_C) -Wall -std=gnu99
 PGSQL := /usr/local/SW/pgsql
 PGBIN := $(PGSQL)/bin
 PIPEFAIL=set -o pipefail
