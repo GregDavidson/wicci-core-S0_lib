@@ -10,7 +10,7 @@ export SHELL=/bin/bash
 DB ?= wicci1
 WicciHome ?= $(HOME)/.Wicci
 Make := $(WicciHome)/Make
-OS := $(shell uname -o)
+OS := $(shell uname)
 M=$(Make)/$(DB)
 Core := $(WicciHome)/Core
 This :=$(Core)/Makefile.wicci
@@ -35,11 +35,12 @@ vpath %.sql-out $M
 vpath %.svg-out $M
 vpath xfiles $M
 # -g creates weird subdirectory on the Mac
-OS_GNU:=GNU/Linux
-ifeq ($(OS),$(OS_GNU))
-DEBUG_SYMS := -g
-else
+OS_GNU:=Linux
+OS_MAC:=Darwin
+ifeq ($(OS),$(OS_MAC))
 DEBUG_SYMS :=
+else
+DEBUG_SYMS := -g
 endif
 CFLAGS = -fpic $(DEBUG_SYMS) -I$(PG_INCLUDE) $(INC_C) -Wall -std=gnu99
 PGSQL := /usr/local/SW/pgsql
