@@ -85,21 +85,21 @@ clean-all: clean-db
 	rm -f $(Core)/*/$(DepMakes)
 depends-all:
 	for f in $$(< $(SqlDirs)); do (cd $(Core)/"$$f" ; make -f $(This)  $(DepMakes)); done
-rebuild-all: TAGS-all depends-all
-	for f in $$(< $(CoreDirs)); do (cd $(Core)/"$$f" ; make all || exit 2) || exit 1; done
-	(cd $(Core); make TAGS TAGS-sql TAGS-c)
+rebuild-all: TAGS-all TAGS-sql TAGS-c depends-all
+	(cd $(Core); for f in $$(< $(CoreDirs)); do (cd $(Core)/"$$f" ; make all || exit 2) || exit 1; done)
+	(cd $(Core); make TAGS-all)
 rebuild-some:
 	for f in $$(< $(SomeDirs)); do (cd $(Core)/"$$f" ; make all || exit 2) || exit 1; done
 xfiles:
 	cd $(XFiles); make all && touch $M/xfiles
+TAGS-all:
+	(cd $(Core); etags $$(wicci-files all); make TAGS-sql TAGS-c)
 TAGS:
-	etags $$(wicci-files all)
+	etags -o $@ $$(awk '{print $$1}' WICCI-SQL-FILES)
 TAGS-sql:
 	etags -o $@ $$(wicci-files sql)
 TAGS-c:
 	etags -o $@ $$(wicci-files c)
-TAGS-all:
-	(cd $(Core); make TAGS TAGS-sql TAGS-c)
 showvars:
 	@ echo SHELL = "$(SHELL)"
 	@ echo OS  = "$(OS)"
