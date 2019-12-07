@@ -78,13 +78,13 @@ clean-out:
 clean-o:
 	for f in *.c; do rm -f $M/$${f%.c}.o $M/$${f%.c}.so; done
 clean-out-all:
-	rm -f $M/*
+	(cd $(Core); rm -f $M/*)
 clean-db: clean-out-all
 	dropdb --if-exists $(DB) && createdb $(DB)
 clean-all: clean-db
-	rm -f $(Core)/*/$(DepMakes)
+	(cd $(Core); rm -f $(Core)/*/$(DepMakes))
 depends-all:
-	for f in $$(< $(SqlDirs)); do (cd $(Core)/"$$f" ; make -f $(This)  $(DepMakes)); done
+	(cd $(Core); for f in $$(< $(SqlDirs)); do (cd $(Core)/"$$f" ; make -f $(This)  $(DepMakes)); done)
 rebuild-all: TAGS-all TAGS-sql TAGS-c depends-all
 	(cd $(Core); for f in $$(< $(CoreDirs)); do (cd $(Core)/"$$f" ; make all || exit 2) || exit 1; done)
 	(cd $(Core); make TAGS-all)
