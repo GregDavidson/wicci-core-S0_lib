@@ -203,22 +203,30 @@ RETURNS boolean AS $$
 	)
 $$ LANGUAGE sql;
 
+-- Only call through declare_system_schema
 CREATE OR REPLACE
-FUNCTION declare_system_schema(text) RETURNS oid AS $$
+FUNCTION declare_system_schema_(text) RETURNS oid AS $$
 DECLARE
 	_name text := schema_trim($1);
 	ss_oid oid := try_system_schema_oid(_name);
-	this regprocedure := 'declare_system_schema(text)';
+	this regprocedure := 'declare_system_schema_(text)';
 BEGIN
 	IF ss_oid IS NOT NULL THEN RETURN ss_oid; END IF;
 	PERFORM meta_execute(this, 'CREATE SCHEMA ' || $1);
 	RETURN system_schema_oid(_name);
 END;
 $$ LANGUAGE plpgsql;
-COMMENT ON FUNCTION declare_system_schema(text) IS '
+COMMENT ON FUNCTION declare_system_schema_(text) IS '
 	Ensure that the specified system schema exists,
 	creating it and raising a notice if it did not
 ';
+
+CREATE OR REPLACE
+FUNCTION declare_system_schema(text) RETURNS oid AS $$
+  SELECT declare_system_schema_($1)
+$$ LANGUAGE sql;
+COMMENT ON FUNCTION declare_system_schema(text) IS
+'Calls declare_system_schema_ - to be redefined later to update associated resources!';
 
 -- system_schema_path() obsoleted by current_schemas(false)
 -- CREATE OR REPLACE
@@ -241,8 +249,7 @@ COMMENT ON FUNCTION declare_system_schema(text) IS '
 -- normalized.';
 
 CREATE OR REPLACE
-FUNCTION set_schema_path(VARIADIC text[] = '{}')
-RETURNS text[] AS $$
+FUNCTION set_schema_path(VARIADIC text[] = '{}') RETURNS text[] AS $$
 DECLARE
 	this regprocedure := 'set_schema_path(text[])';
 	schema_names text[] := schema_path_trim($1);
@@ -293,8 +300,8 @@ COMMENT ON FUNCTION set_file(text, text) IS
 'Records the current schema, filename and (optionally) revision.';
 
 CREATE OR REPLACE
-FUNCTION ensure_schema_ready() RETURNS regprocedure AS $$
-	SELECT 'ensure_schema_ready()'::regprocedure;
+FUNCTION ensure_schema_ready() RETURNS text AS $$
+	SELECT 'Brama is ready!'
 $$ LANGUAGE sql;
 
 -- SELECT set_schema_path('s0_lib','public');

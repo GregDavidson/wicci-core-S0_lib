@@ -36,6 +36,8 @@ RETURNS schema_id_arrays AS $$
 	SELECT $1::schema_id_arrays
 $$ LANGUAGE sql;
 
+-- ** TABLE our_schema_names
+
 CREATE DOMAIN schema_names AS text NOT NULL;
 CREATE DOMAIN maybe_schema_names AS text;
 -- CREATE DOMAIN schema_name_arrays AS text[];
@@ -62,6 +64,11 @@ on those of the lower numbered schemas, but not vice versa.';
 COMMENT ON COLUMN our_schema_names.schema_name IS
 'UNIQUE prevents pg_namespace(oid) change disaster!!';
 
+-- ** TABLE our_namespaces
+
+-- Alas, the trigger system is not doing the job!
+-- We'll update and/or insert rows as needed in declare_system_schema
+
 ALTER SEQUENCE schema_id_seq OWNED BY our_schema_names.id;
 
 CREATE TABLE IF NOT EXISTS our_namespaces (
@@ -77,13 +84,38 @@ and types reference this table.  When we drop a schema we drop the row
 here, which ensure that we have no references to modules, functions
 and types which no longer exist.  Ideally we should be able to simply
 drop a row in this table and have the CASCADE remove all of our
-modules, functions and types even without dropping the schema???';
+modules, functions and types even without dropping the schema???
+We update and/or add rows as needed in S1_refs.declare_system_schema!!
+(not in S0_lib.declare_system_schema!)';
 COMMENT ON COLUMN our_namespaces.id IS
 'When 0 the insert trigger will try to fill it in from our_schema_names;
 UNIQUE prevents pg_namespace(oid) change disaster!!';
 COMMENT ON COLUMN our_namespaces.schema_oid IS
 'When 0 the insert trigger will try to fill it in from pg_namespace;
 REFERENCES pg_namespace(nspname) but not supported in pgsql!!';
+
+-- ** Materialized Namespace Views
+
+-- These should be refreshed when we create a new schema by set_schema_path()
+-- REFRESH MATERIALIZED VIEW our_schema_namespaces;
+
+
+CREATE MATERIALIZED VIEW IF NOT EXISTS our_schema_namespaces(id, oid, schema_name) AS
+SELECT DISTINCT id, oid, schema_name FROM our_schema_names 
+LEFT JOIN pg_namespace ON (schema_name = nspname);
+
+CREATE MATERIALIZED VIEW IF NOT EXISTS our_namespaces_by_name(id, oid, schema_name) AS
+SELECT DISTINCT id, oid, schema_name FROM our_schema_names 
+LEFT JOIN pg_namespace ON (schema_name = nspname)
+ORDER BY schema_name;
+
+CREATE MATERIALIZED VIEW IF NOT EXISTS our_existing_namespaces(id, oid, schema_name) AS
+SELECT DISTINCT id, oid, schema_name FROM our_schema_names 
+LEFT JOIN pg_namespace ON (schema_name = nspname)
+WHERE oid IS NOT NULL
+ORDER BY schema_name;
+
+-- ** Schema Service FUnctions
 
 CREATE OR REPLACE
 FUNCTION schema_id_to_name(schema_ids) RETURNS schema_names AS $$
@@ -94,6 +126,8 @@ CREATE OR REPLACE
 FUNCTION namespace_oid_to_name(oid) RETURNS text AS $$
 	SELECT nspname::text FROM pg_namespace WHERE oid = $1
 $$ LANGUAGE sql;
+
+
 
 /*
 CREATE OR REPLACE
@@ -275,9 +309,17 @@ CREATE TRIGGER our_namespace_insert
 	BEFORE INSERT ON our_namespaces
 	FOR EACH ROW EXECUTE PROCEDURE our_namespace_insert();
 
-SELECT declare_monotonic('our_namespaces');
+-- This is too much right now. It needs to allow
+-- updating of NULL fields as well as adding rows!
+-- SELECT declare_monotonic('our_namespaces');
 
-SELECT get_schema_name_id('foo');
+-- SELECT get_schema_name_id('foo');
 
-INSERT INTO our_namespaces(schema_oid)
-	SELECT oid FROM pg_namespace WHERE nspname = 'pg_catalog';
+-- Violates foreign key constraints, yet used to work;
+-- I think it was because of the triggers - which are
+-- on their way back. The triggers seem to be able to
+-- violate the foreign key constraints!!
+
+-- Any reason why I would want this??
+-- INSERT INTO our_namespaces(schema_oid)
+-- 	SELECT oid FROM pg_namespace WHERE nspname = 'pg_catalog';

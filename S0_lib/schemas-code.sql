@@ -18,26 +18,26 @@ plus 1 for a NUL byte, plus padding to bring us to a
 word boundary, assuming we began on a word boundary';
 
 -- should we put in a check that the schema exists???
-CREATE OR REPLACE VIEW schema_view_ AS
+CREATE OR REPLACE VIEW schema_view AS
 	SELECT id, schema_name, schema_oid,
-		aligned_length(schema_name) AS name_size_
+	 octet_length(schema_name) AS schema_name_len
 	FROM our_schema_names
 	LEFT OUTER JOIN our_namespaces
 	USING(id);
-
-CREATE OR REPLACE VIEW schema_view AS
-	SELECT
-		os.id::integer AS id_,
-		os.schema_name::text AS name_,
-		os.schema_oid AS oid_,
-		name_size_, min_id_, max_id_, sum_text_
-	FROM schema_view_ os,  (
-			SELECT MIN(id), MAX(id), SUM(name_size_)::bigint
-			FROM schema_view_ WHERE schema_oid IS NOT NULL
-	) AS foo(min_id_, max_id_, sum_text_)
-	WHERE schema_oid IS NOT NULL;
 COMMENT ON VIEW schema_view IS
 'Used by spx_load_schemas in spx.so';
+
+-- CREATE OR REPLACE VIEW old_schema_view AS
+-- 	SELECT
+-- 		os.id::integer AS id_,
+-- 		os.schema_name::text AS name_,
+-- 		os.schema_oid AS oid_,
+-- 		name_size_, min_id_, max_id_, sum_text_
+-- 	FROM schema_view_ os,  (
+-- 			SELECT MIN(id), MAX(id), SUM(name_size_)::bigint
+-- 			FROM schema_view_ WHERE schema_oid IS NOT NULL
+-- 	) AS foo(min_id_, max_id_, sum_text_)
+-- 	WHERE schema_oid IS NOT NULL;
 
 CREATE OR REPLACE
 FUNCTION schema_clean() RETURNS void AS $$
@@ -136,6 +136,9 @@ CREATE OR REPLACE FUNCTION schema_path_array(
 		FROM unnest($1) x
 	)::schema_id_arrays
 $$ LANGUAGE sql;
+
+COMMENT ON FUNCTION schema_path_array(text[]) IS
+'Used by spx_load_schema_path in spx.so';
 
 SELECT test_func(
 	'schema_path_array(text[])',
@@ -301,25 +304,31 @@ RETURNS SETOF schema_names AS $$
 $$ LANGUAGE sql;
 
 CREATE OR REPLACE VIEW schema_path_by_id AS
-	SELECT id_, name_, oid_ FROM schema_path_list() AS s
-	INNER JOIN schema_view ON(s = name_)
-	ORDER BY id_;
-COMMENT ON VIEW schema_path_by_id IS
-'Used by spx_load_schema_path in spx.so';
+SELECT DISTINCT	id, schema_name, schema_oid
+FROM unnest(schema_path_array()) id_
+JOIN schema_view ON id_ = id
+ORDER BY id;
+
+-- Got order wrong and introduced an extra schema:
+-- CREATE OR REPLACE VIEW schema_path_by_id AS
+-- 	SELECT id, schema_name, schema_oid
+-- 	 FROM schema_path_list() AS s
+-- 	INNER JOIN schema_view ON(s = schema_name)
+-- 	ORDER BY id;
 
 -- still needed???
-CREATE OR REPLACE
-FUNCTION xxx_schema_path_name_oid_list()
-RETURNS  TABLE(o oid, n text) AS $$
-	SELECT bar.oid, bar.nspname::text
-	FROM schema_path_list() AS foo
-	INNER JOIN pg_namespace bar ON(foo=bar.nspname)
-$$ LANGUAGE sql;
+-- CREATE OR REPLACE
+-- FUNCTION xxx_schema_path_name_oid_list()
+-- RETURNS  TABLE(o oid, n text) AS $$
+-- 	SELECT bar.oid, bar.nspname::text
+-- 	FROM schema_path_list() AS foo
+-- 	INNER JOIN pg_namespace bar ON(foo=bar.nspname)
+-- $$ LANGUAGE sql;
 
 -- still needed???
-CREATE OR REPLACE
-FUNCTION type_name_to_oid_namespace(text)
-RETURNS TABLE(ty oid, ns oid) AS $$
-	SELECT oid, typnamespace
-	FROM pg_type WHERE typname = $1::text
-$$ LANGUAGE sql;
+-- CREATE OR REPLACE
+-- FUNCTION type_name_to_oid_namespace(text)
+-- RETURNS TABLE(ty oid, ns oid) AS $$
+-- 	SELECT oid, typnamespace
+-- 	FROM pg_type WHERE typname = $1::text
+-- $$ LANGUAGE sql;
