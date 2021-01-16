@@ -1,0 +1,46 @@
+* Wicci Git Repositories Info
+
+cd ~/Projects/Wicci
+
+** nesting
+
+
+find * -name .git | sort
+
+Core/.git
+Core/S1_refs/.git
+Core/S2_core/.git
+Core/S3_more/.git
+Core/S4_doc/.git
+Core/S5_xml/.git
+Core/S6_http/.git
+Core/S7_wicci/.git
+Doc/PublishedDocs/.git
+Shim/Clojure-Shim/.git
+Shim/Next-Shim/.git
+Shim/Rust-Shim/.git
+Shim/Rust+TinyHttpd-Shim/.git
+Shim/Wicci-Shim-Rust/.git
+Tools/.git
+XFiles/.git
+
+** remote.origin.url
+
+for f in $(find * -name .git); do ( d="${f%/.git}"; 'cd' "$d"; echo "$d $(git config --get remote.origin.url)" ); done
+
+Core/S1_refs https://github.com/GregDavidson/wicci-core-S1_refs.git
+Core/S2_core https://github.com/GregDavidson/wicci-core-S2_core.git
+Core/S4_doc https://github.com/GregDavidson/wicci-core-S4_doc.git
+Core/S5_xml https://github.com/GregDavidson/wicci-core-S5_xml.git
+Core/S6_http https://github.com/GregDavidson/wicci-core-S6_http.git
+Core/S7_wicci https://github.com/GregDavidson/wicci-core-S7_wicci.git
+Core https://github.com/GregDavidson/wicci-core-S0_lib.git
+Core/S3_more https://github.com/GregDavidson/wicci-core-S3_more.git
+Doc/PublishedDocs https://github.com/GregDavidson/wicci-doc.git
+Shim/Clojure-Shim 
+Shim/Rust-Shim greg@ngender.org:Git/Rust-Shim
+Shim/Rust+TinyHttpd-Shim https://github.com/GregDavidson/wicci-shim-rust.git
+Shim/Wicci-Shim-Rust https://github.com/GregDavidson/wicci-shim-rust.git
+Shim/Next-Shim 
+Tools https://github.com/GregDavidson/wicci-tools.git
+XFiles https://github.com/GregDavidson/Wicci-XFiles.git
