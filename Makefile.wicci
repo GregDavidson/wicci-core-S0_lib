@@ -72,6 +72,11 @@ default: all
 # Otherwise use this line:
 $(DepMakes): WICCI-SQL-FILES
 	PATH=".:$$PATH" make-depends $^ | grep -v '^	$$(PSQL)'> $@
+# !!! This Is suddenly failing with
+# make[1]: Entering directory '/home/greg/Projects/Wicci/Core/S0_lib'
+# PATH=".:$PATH" make-depends WICCI-SQL-FILES | grep -v '^	$(PSQL)'> Makefile.depends
+# /usr/bin/env: ‘gawk -f’: No such file or directory
+# 9:41 p.m., Monday, 9 December 2019
 clean: clean-out clean-o
 clean-out:
 	for f in *.sql; do rm -f $M/$$f-out $M/$$f-out-err; done
