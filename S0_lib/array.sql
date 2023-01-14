@@ -17,6 +17,12 @@ SELECT set_file('array.sql', '$Id');
 --	and create a non_null version with the original name.
 -- See token --HERE-- below:
 
+-- Possible upgrades:
+-- Use new Polymorphic Types
+-- anycompatiblearray instead of ANYARRAY
+-- anycompatible instead of ANYELEMENT
+-- see https://www.postgresql.org/docs/15/extend-type-system.html
+
 CREATE OR REPLACE
 FUNCTION try_array_sub(ANYARRAY, integer)
 RETURNS ANYELEMENT AS $$
@@ -438,7 +444,7 @@ SELECT test_func(
 );
 
 -- ** array_minus(ANYARRAY, ANYELEMENT) -> ANYARRAY
--- OBSOLETED BY NEW built-in FUNCTION array_remove
+-- OBSOLETED BY NEW built-in FUNCTION array_remove(anycompatiblearray,anycompatible)
 -- CREATE OR REPLACE
 -- FUNCTION array_minus(ANYARRAY, ANYELEMENT) RETURNS ANYARRAY AS $$
 -- 	SELECT CASE
@@ -459,7 +465,7 @@ SELECT test_func(
 
 -- Test PostgreSQL 9.3 array_remove function:
 SELECT test_func(
-  'array_remove(ANYARRAY, ANYELEMENT)',
+  'array_remove(anycompatiblearray, anycompatible)',
   array_remove(ARRAY['one', 'two'], 'one'::text),
   ARRAY['two']
 );
